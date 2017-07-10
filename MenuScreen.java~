@@ -1,0 +1,189 @@
+/** 
+ * ----------!!!!! --TO DO THIS WEEKEND-- !!!!----------
+ * 
+ * player wall movement; sprite changes
+ * 
+ * explosion :killing players; png; last longer 
+ * 
+ * collision detection 
+ * 
+ * special features!!!
+ *      -bomb explosions stronger 
+ *                -sprites
+ *      -player moves faster 
+ *                -sprites
+ *
+ *      -spawn delay (2s)
+ */
+
+
+/**
+ * MenuScreen
+ * class to create menu screen 
+ * @version
+ * @author 
+ * May 23, 2017
+ */
+
+import javax.swing.*;
+import java.awt.*;
+
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
+import java.awt.image.BufferedImage;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+
+public class MenuScreen extends JFrame {
+
+    public static BufferedImage basicTileImage;
+    public static BufferedImage unbreakableTileImage;
+    public static BufferedImage breakableTileImage;
+    public static BufferedImage p1Images;
+
+    JFrame menuFrame = new JFrame();
+
+    //constructor  
+    public MenuScreen() {
+
+        setTitle("Ninja Duel");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(480, 380);
+        setResizable(false);
+        setLocationRelativeTo(null);
+
+        CustomJPanel pan = new CustomJPanel();
+
+        pan.setLayout(new BoxLayout(pan, BoxLayout.Y_AXIS));
+
+        JPanel buttonPan = new JPanel();
+        buttonPan.setLayout(new BoxLayout(buttonPan, BoxLayout.X_AXIS));
+        buttonPan.setMaximumSize(new Dimension(500, 50));
+        buttonPan.setOpaque(false);
+
+        buttonPan.add(Box.createHorizontalStrut(60));
+
+        CustomJButton startButton = new CustomJButton(160, 50);
+        startButton.addActionListener(new StartButtonListener());
+        buttonPan.add(startButton);
+
+        buttonPan.add(Box.createHorizontalStrut(45));
+
+        CustomJButton controlButton = new CustomJButton(160, 50);
+        controlButton.addActionListener(new ControlButtonListener());
+        buttonPan.add(controlButton);
+
+        pan.add(Box.createRigidArea(new Dimension(0, 286)));
+        pan.add(buttonPan);
+        add(pan);
+        setVisible(true);
+    }
+
+    //class for start button listener 
+    class StartButtonListener implements ActionListener {
+
+        public void actionPerformed(ActionEvent event) {
+            System.out.println("Start Button Pressed");
+            menuFrame.dispose();
+            setVisible(false);
+            new GameFrame();
+        }
+
+    }
+
+    //class for the control button listener 
+    class ControlButtonListener implements ActionListener {
+
+        public void actionPerformed(ActionEvent event) {
+            System.out.println("Control Button Pressed");
+            menuFrame.dispose();
+            setVisible(false);
+            new ControlsScreen();
+        }
+
+    }
+
+    //main method
+    public static void main(String[] args) {
+
+        //basic Tile Sprite
+        try {
+            basicTileImage = (ImageIO.read(new File("grass_texture.png")));
+        } catch (Exception e) {
+            System.out.println("error loading basic sprite");
+        }
+
+        //unbreakable tile sprite 
+        try {
+            unbreakableTileImage = (ImageIO.read(new File("house_sprite.png")));
+        } catch (Exception e) {
+            System.out.println("error loading unbreakable sprite");
+        }
+
+        //breakable tile sprite
+        try {
+            breakableTileImage = (ImageIO.read(new File("tree_sprite.png")));
+        } catch (Exception e) {
+            System.out.println("error loading breakable sprite");
+        }
+
+        new MenuScreen();
+    }
+
+    class CustomJPanel extends JPanel {
+    	
+        protected void paintComponent(Graphics g) {
+            //Call to super method for all other necessary functions 
+            super.paintComponents(g);
+
+            try {
+                g.drawImage(ImageIO.read(new File("start.png")), 0, 0, null);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block 
+                e.printStackTrace();
+            }
+        }
+    }
+
+    class CustomJButton extends JButton {
+
+        public CustomJButton(int width, int height) {
+            super();
+            //remove the button's default coloring 
+            super.setContentAreaFilled(false);
+
+            //sets the size 
+            setMaximumSize(new Dimension(width, height));
+            //make it align center 
+            setAlignmentX(Component.CENTER_ALIGNMENT);
+            //remove border 
+            setBorderPainted(false);
+            //sets the text color to be white 
+            //remove the focus dotted border 
+            setFocusPainted(false);
+            //sets the font of text on the button 
+            setFont(new Font("Serif", Font.BOLD, 1));
+            //sets the buttons to be invisible
+            setOpaque(false);
+            setContentAreaFilled(false);
+
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            g.setColor(new Color(0, 0, 0, 0));
+
+            //fills the background with the color determined above 
+            g.fillRect(0, 0, getWidth(), getHeight());
+
+            //make call to the super method to paint the text above the background 
+            super.paintComponent(g);
+        }
+
+    }
+
+}

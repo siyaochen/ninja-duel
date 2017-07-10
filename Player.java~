@@ -1,0 +1,235 @@
+/**
+ * Player
+ * This class represents the player object in the game, and can move around, place bombs, and die.
+ * @author Siyao Chen, Vicki Xu
+ * @version 1.0
+ * May 23, 2017
+ */
+
+/*
+powerups
+collision:
+
+ */
+
+import java.awt.image.BufferedImage;
+
+public class Player {
+
+    public int xCoordinate, yCoordinate; // Coordinates of player
+    public int xSpeed, ySpeed; // Speed of player
+
+    public BufferedImage[] sprites; // Sprites of player
+    public int spriteIndex; // To provide variety for the sprites
+    public static int HEIGHT = 29, WIDTH = 27; // Size of player
+
+    public int numLives; // Number of lives left
+    public int playerNum; // Player number
+    public long lastPlacedBomb; // Time last placed bomb
+
+    public boolean immune; // Can't be killed by bombs
+
+    /**
+     * Player
+     * Constructor
+     * @param playerNum The first or second player in the game
+     */
+    public Player(int playerNum) {
+        if (playerNum == 1) {
+            // Set x,y to top left corner
+            xCoordinate = Field.X_DISPLACEMENT;
+            yCoordinate = Field.Y_DISPLACEMENT;
+
+            // Set sprite to white and blue
+        } else if (playerNum == 2) {
+            // Set x,y to bottom right corner
+            xCoordinate = Field.X_DISPLACEMENT + (Field.FIELD_SIZE - 1) * Field.TILE_SIZE;
+            yCoordinate = Field.Y_DISPLACEMENT + (Field.FIELD_SIZE - 1) * Field.TILE_SIZE;
+
+            // Set sprite to black and red
+        }
+
+        // Set number of lives
+        numLives = 3;
+
+        // Set player number
+        this.playerNum = playerNum;
+
+        // Set bomb counter
+        lastPlacedBomb = 0;
+
+        // Set not immune
+        immune = false;
+    }
+
+    /** 
+     * hitTile
+     * This method returns if the player is going to hit the tile or not
+     * @param field The field player exists in
+     * @return boolean If it's going to hit tile
+     */
+    public boolean hitTile(int dir, Field field) {
+        Tile[][] tileArray = field.tileArray;
+
+        if (dir == 1) {
+            if (xSpeed < 0 && Field.xCoordinateToPos(xCoordinate + xSpeed) >= 0 && Field.xCoordinateToPos(xCoordinate + xSpeed) <= 9 && Field.xCoordinateToPos(xCoordinate + xSpeed + 26) <= 10) {
+                return !(tileArray[Field.yCoordinateToPos(yCoordinate + ySpeed + 8)][Field.xCoordinateToPos(xCoordinate + xSpeed + 5)] instanceof BasicTile
+                        && tileArray[Field.yCoordinateToPos(yCoordinate + ySpeed + 26)][Field.xCoordinateToPos(xCoordinate + xSpeed + 5)] instanceof BasicTile);
+            } else if (xSpeed > 0 && Field.xCoordinateToPos(xCoordinate + xSpeed + 5) >= 0 && Field.xCoordinateToPos(xCoordinate + xSpeed - 5) <= 9) {
+                return !(tileArray[Field.yCoordinateToPos(yCoordinate + ySpeed + 8)][Field.xCoordinateToPos(xCoordinate + xSpeed + WIDTH - 5)] instanceof BasicTile
+                        && tileArray[Field.yCoordinateToPos(yCoordinate + ySpeed + 26)][Field.xCoordinateToPos(xCoordinate + xSpeed + WIDTH - 5)] instanceof BasicTile);
+            }
+        } else {
+            if (ySpeed < 0 && Field.yCoordinateToPos(yCoordinate + ySpeed) >= 0 && Field.yCoordinateToPos(yCoordinate + ySpeed + 8) <= 9 && Field.xCoordinateToPos(xCoordinate + xSpeed + 26) <= 10) {
+                return !(tileArray[Field.yCoordinateToPos(yCoordinate + ySpeed + 8)][Field.xCoordinateToPos(xCoordinate + xSpeed + 8)] instanceof BasicTile
+                        && tileArray[Field.yCoordinateToPos(yCoordinate + ySpeed + 8)][Field.xCoordinateToPos(xCoordinate + xSpeed + 26 - 8)] instanceof BasicTile);
+            } else if (ySpeed > 0 && Field.yCoordinateToPos(yCoordinate + ySpeed) >= 0 && Field.yCoordinateToPos(yCoordinate + ySpeed) <= 9 && Field.xCoordinateToPos(xCoordinate + xSpeed + 26) <= 10) {
+                return !(tileArray[Field.yCoordinateToPos(yCoordinate + ySpeed + HEIGHT - 2)][Field.xCoordinateToPos(xCoordinate + xSpeed + 8)] instanceof BasicTile
+                        && tileArray[Field.yCoordinateToPos(yCoordinate + ySpeed + HEIGHT - 2)][Field.xCoordinateToPos(xCoordinate + xSpeed + 26 - 8)] instanceof BasicTile);
+            }
+        }
+        return false;
+
+        /*
+        // Return false if basic tile, true otherwise
+        if (xSpeed <= 0 && ySpeed <= 0 && Field.xCoordinateToPos(xCoordinate + xSpeed) >= 0 && Field.yCoordinateToPos(yCoordinate + ySpeed) >= 0) {
+            return !(tileArray[Field.yCoordinateToPos(yCoordinate + ySpeed)][Field.xCoordinateToPos(xCoordinate + xSpeed)] instanceof BasicTile);
+        }
+        if (xSpeed >= 0 && ySpeed <= 0 && Field.xCoordinateToPos(xCoordinate + xSpeed) <= 9 && Field.yCoordinateToPos(yCoordinate + ySpeed) >= 0) {
+            return !(tileArray[Field.yCoordinateToPos(yCoordinate + ySpeed)][Field.xCoordinateToPos(xCoordinate + xSpeed + WIDTH)] instanceof BasicTile);
+        }
+        if (xSpeed <= 0 && ySpeed >= 0 && Field.xCoordinateToPos(xCoordinate + xSpeed) >= 0 && Field.yCoordinateToPos(yCoordinate + ySpeed) <= 9) {
+            return !(tileArray[Field.yCoordinateToPos(yCoordinate + ySpeed + HEIGHT - 2)][Field.xCoordinateToPos(xCoordinate + xSpeed)] instanceof BasicTile);
+        }
+        if (xSpeed >= 0 && ySpeed >= 0 && Field.xCoordinateToPos(xCoordinate + xSpeed) <= 9 && Field.yCoordinateToPos(yCoordinate + ySpeed) <= 9) {
+            return !(tileArray[Field.yCoordinateToPos(yCoordinate + ySpeed + HEIGHT - 2)][Field.xCoordinateToPos(xCoordinate + xSpeed + WIDTH)] instanceof BasicTile);
+        }
+        return false;
+        */
+    }
+
+    /**
+     * move
+     * This method moves the player in its direction
+     * @param field The field player is moving in
+     */
+    public void move(Field field) {
+        // Check if player is within boundaries
+        if ((xCoordinate + xSpeed >= Field.X_DISPLACEMENT) &&
+                (xCoordinate + xSpeed + WIDTH <= Field.X_DISPLACEMENT + Field.FIELD_SIZE * Field.TILE_SIZE) &&
+                (yCoordinate + ySpeed >= Field.Y_DISPLACEMENT) &&
+                (yCoordinate + ySpeed + HEIGHT - 2 <= Field.Y_DISPLACEMENT + Field.FIELD_SIZE * Field.TILE_SIZE)) {
+
+            if (!hitTile(1, field)) {
+                xCoordinate += xSpeed;
+            }
+            if (!hitTile(2, field)) {
+                yCoordinate += ySpeed;
+            }
+        } else {
+            System.out.println("NOT IN RANGE: " + xCoordinate + ", " + yCoordinate);
+        }
+
+        /*
+        // Check x-direction movement
+        if (xSpeed > 0 && canMovePositiveX(field)) {
+            xCoordinate += xSpeed;
+        } else if (xSpeed < 0 && canMoveNegativeX(field)) {
+            xCoordinate += xSpeed;
+        }
+
+        // Check y-direction movement
+        if (ySpeed > 0 && canMovePositiveY(field)) {
+            yCoordinate += ySpeed;
+        } else if (ySpeed < 0 && canMoveNegativeY(field)) {
+            yCoordinate += ySpeed;
+        }
+        */
+    }
+
+    private boolean canMovePositiveX(Field field) {
+        // Check if moving within boundaries
+        if (xCoordinate + xSpeed + WIDTH < Field.X_DISPLACEMENT + Field.FIELD_SIZE * Field.TILE_SIZE) {
+            // Check if hitting tile
+            return !(field.tileArray[Field.yCoordinateToPos(yCoordinate)][Field.xCoordinateToPos(xCoordinate + xSpeed + WIDTH)] instanceof BasicTile);
+        }
+        return false;
+    }
+
+    private boolean canMoveNegativeX(Field field) {
+        // Check if moving within boundaries
+        if (xCoordinate + xSpeed >= Field.X_DISPLACEMENT) {
+            // Check if hitting tile
+            return !(field.tileArray[Field.yCoordinateToPos(yCoordinate)][Field.xCoordinateToPos(xCoordinate + xSpeed)] instanceof BasicTile);
+        }
+        return false;
+    }
+
+    private boolean canMovePositiveY(Field field) {
+        // Check if moving within boundaries
+        if (yCoordinate + ySpeed + HEIGHT <= Field.X_DISPLACEMENT + Field.FIELD_SIZE * Field.TILE_SIZE) {
+            // Check if hitting tile
+            return !(field.tileArray[Field.yCoordinateToPos(yCoordinate + ySpeed + HEIGHT - 2)][Field.xCoordinateToPos(xCoordinate)] instanceof BasicTile);
+        }
+        return false;
+    }
+
+    private boolean canMoveNegativeY(Field field) {
+        // Check if moving within boundaries
+        if (yCoordinate + ySpeed >= Field.Y_DISPLACEMENT) {
+            System.out.println(xCoordinate + ", " + yCoordinate);
+            // Check if hitting tile
+            if(!(field.tileArray[Field.yCoordinateToPos(yCoordinate + ySpeed)][Field.xCoordinateToPos(xCoordinate)] instanceof BasicTile)) {
+                System.out.print("yes!");
+                return true;
+            } else {
+                System.out.print("no");
+            }
+        }
+        return false;
+    }
+
+    /**
+     * placeBomb
+     * This method creates a Bomb object and places it at the player's position
+     */
+    public void placeBomb(Field field) {
+        // Check if placing bomb is possible
+        if (System.currentTimeMillis() > lastPlacedBomb + 3000) {
+            // Instantiate bomb
+            Bomb bomb = new Bomb(this);
+
+            // Add bomb to ArrayList in the field
+            field.addBomb(bomb);
+
+            // Update last placed bomb time
+            lastPlacedBomb = System.currentTimeMillis();
+        }
+    }
+
+    /**
+     * respawn
+     * This method subtracts one life and places the player in original spot
+     */
+    public void respawn() {
+        numLives--;
+
+        if (numLives > 0) {
+            if (playerNum == 1) {
+                // Place player in top left corner
+                xCoordinate = Field.X_DISPLACEMENT;
+                yCoordinate = Field.Y_DISPLACEMENT;
+            } else if (playerNum == 2) {
+                // Place player in bottom right corner
+                xCoordinate = Field.X_DISPLACEMENT + (Field.FIELD_SIZE - 1) * Field.TILE_SIZE;
+                yCoordinate = Field.Y_DISPLACEMENT + (Field.FIELD_SIZE - 1) * Field.TILE_SIZE;
+            }
+
+            immune = true;
+        } else {
+            //brings over to "game over" screen
+            new GameOverScreen(this);
+        }
+    }
+
+}
