@@ -1,4 +1,2 @@
 # Ninja-Duel
-A Bomberman-like clone written in Java.
-
-File structure to be organized later.
+A simple arcade game written in Java. Similar to Bomberman, players can move around the field, collect powerups, and place bombs to defeat their opponent.
