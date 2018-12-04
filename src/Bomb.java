@@ -29,8 +29,6 @@ public class Bomb {
 
     private Player player; // Player that placed the bomb
 
-    static final File DIR = new File("c:\\temp\\java\\bombs_and_explosions");
-
     /**
      * Bomb
      * Constructor
@@ -49,7 +47,7 @@ public class Bomb {
 
         // Set up bomb sprite
         try {
-            bombSprite = ImageIO.read(new File("bombs_and_explosions/bomb.png"));
+            bombSprite = ImageIO.read(new File("resources/bomb_and_explosions/bomb.png"));
         } catch (Exception e) {
             System.out.println("Error loading sprite: bomb.png");
         }
@@ -58,7 +56,7 @@ public class Bomb {
         explosionSprites = new BufferedImage[7];
         for (int i = 0; i < 7; i++) {
             try {
-                explosionSprites[i] = ImageIO.read(new File("bombs_and_explosions/explosion" + (i + 1) + ".png"));
+                explosionSprites[i] = ImageIO.read(new File("resources/bomb_and_explosions/explosion" + (i + 1) + ".png"));
             } catch (Exception e) {
                 System.out.println("Error loading sprite: explosion" + (i + 1) + ".png");
             }

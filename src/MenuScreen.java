@@ -1,11 +1,3 @@
-/**
- * MenuScreen
- * class to create menu screen
- * @version
- * @author
- * May 23, 2017
- */
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -36,7 +28,6 @@ public class MenuScreen extends JFrame {
 
     //constructor
     public MenuScreen() {
-
         setTitle("Ninja Duel");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(480, 380);
@@ -79,14 +70,12 @@ public class MenuScreen extends JFrame {
             setVisible(false);
             try {
                 stopMusicFile();
-                playMusicFile("gameMusic.wav", true);
+                playMusicFile("resources/gameMusic.wav", true);
             } catch (IOException ee) {
             } catch (LineUnavailableException ee) {
             } catch (UnsupportedAudioFileException ee) {
             }
-
             new GameFrame();
-
         }
 
     }
@@ -105,35 +94,30 @@ public class MenuScreen extends JFrame {
 
     //main method
     public static void main(String[] args) {
-
         //basic Tile Sprite
         try {
-            basicTileImage = (ImageIO.read(new File("grass_texture.png")));
+            basicTileImage = (ImageIO.read(new File("resources/grass_texture.png")));
         } catch (Exception e) {
             System.out.println("error loading basic sprite");
         }
 
         //unbreakable tile sprite
         try {
-            unbreakableTileImage = (ImageIO.read(new File("house_sprite.png")));
+            unbreakableTileImage = (ImageIO.read(new File("resources/house_sprite.png")));
         } catch (Exception e) {
             System.out.println("error loading unbreakable sprite");
         }
 
         //breakable tile sprite
         try {
-            breakableTileImage = (ImageIO.read(new File("tree_sprite.png")));
+            breakableTileImage = (ImageIO.read(new File("resources/tree_sprite.png")));
         } catch (Exception e) {
             System.out.println("error loading breakable sprite");
         }
 
-
-
         //play the music
         try {
-
-            playMusicFile("MenuMusic.wav", true);
-
+            playMusicFile("resources/MenuMusic.wav", true);
         } catch (IOException ee) {
         } catch (LineUnavailableException ee) {
         } catch (UnsupportedAudioFileException ee) {
@@ -198,7 +182,7 @@ public class MenuScreen extends JFrame {
             super.paintComponents(g);
 
             try {
-                g.drawImage(ImageIO.read(new File("start.png")), 0, 0, null);
+                g.drawImage(ImageIO.read(new File("resources/start.png")), 0, 0, null);
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

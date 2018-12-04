@@ -53,11 +53,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 class GameFrame extends JFrame {
 
-    //static
-    final File dir = new File("c:\\temp\\java\\p1");
-    // static
-    final File dir2 = new File("c:\\temp\\java\\p2");
-    //static final File dir2 = new File("/Users/vicki/Documents/ComSci-Sum/p2");
     public int spriteNum;
     public String spriteUsed1;
     public String spriteUsed2;
@@ -120,12 +115,8 @@ class GameFrame extends JFrame {
     public void animate() {
 
         while (true) {
-            //Tile[][] tileArray = gameField.getField();
-            //play1Lives = player1.getnumLives();
-            //play2Lives = player2.getnumLives();
             player1.move(gameField);
             player2.move(gameField);
-            //player2.move(gameField);
             try {
                 Thread.sleep(50);
             } catch (Exception exc) {} //delay
@@ -148,7 +139,7 @@ class GameFrame extends JFrame {
             setDoubleBuffered(true);
 
             try {
-                g.drawImage(ImageIO.read(new File("gameBackground.png")), 0, 0, null);
+                g.drawImage(ImageIO.read(new File("resources/gameBackground.png")), 0, 0, null);
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -177,8 +168,8 @@ class GameFrame extends JFrame {
 
             // Draw players
             try {
-                g.drawImage(ImageIO.read(new File("p1/" + spriteUsed1)), player1.xCoordinate, player1.yCoordinate, null);
-                g.drawImage(ImageIO.read(new File("p2/" + spriteUsed2)), player2.xCoordinate, player2.yCoordinate, null);
+                g.drawImage(ImageIO.read(new File("resources/p1/" + spriteUsed1)), player1.xCoordinate, player1.yCoordinate, null);
+                g.drawImage(ImageIO.read(new File("resources/p2/" + spriteUsed2)), player2.xCoordinate, player2.yCoordinate, null);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -217,7 +208,7 @@ class GameFrame extends JFrame {
                 }
                 
                 try {
-                  MenuScreen.playMusicFile("bomb.wav", false);
+                  MenuScreen.playMusicFile("resources/bomb.wav", false);
                 } catch (IOException ee) {
                 } catch (LineUnavailableException ee) {
                 } catch (UnsupportedAudioFileException ee) {
@@ -271,7 +262,7 @@ class GameFrame extends JFrame {
                 // Play game over music file
                 try {
                     MenuScreen.stopMusicFile();
-                    MenuScreen.playMusicFile("gameOver.wav", true);
+                    MenuScreen.playMusicFile("resources/gameOver.wav", true);
 
                 } catch (IOException ee) {
                 } catch (LineUnavailableException ee) {

@@ -22,7 +22,7 @@ public class HealthPowerUp extends PowerUp {
 
         // Load the sprite
         try {
-            sprite = ImageIO.read(new File("pu_heart.png"));
+            sprite = ImageIO.read(new File("resources/pu_heart.png"));
         } catch (Exception e) {
             System.out.println("Unable to load health power-up sprite.");
         }

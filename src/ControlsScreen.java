@@ -67,7 +67,7 @@ class ControlsScreen extends JFrame{
             super.paintComponents(g);
 
             try {
-                g.drawImage(ImageIO.read(new File("controls.png")), 0, 0, null);
+                g.drawImage(ImageIO.read(new File("resources/controls.png")), 0, 0, null);
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

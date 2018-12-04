@@ -80,7 +80,7 @@ class GameOverScreen extends JFrame{
             try {
             // Stop the previous music, and play the menu music.
             MenuScreen.stopMusicFile();
-            MenuScreen.playMusicFile("MenuMusic.wav", true);
+            MenuScreen.playMusicFile("resources/MenuMusic.wav", true);
           } catch (IOException ee) {
           } catch (LineUnavailableException ee) {
           } catch (UnsupportedAudioFileException ee) {
@@ -112,14 +112,14 @@ class GameOverScreen extends JFrame{
 
             if (player.playerNum == 1) {
                 try {
-                    g.drawImage(ImageIO.read(new File("win_screen2.png")), 0, 0, null);
+                    g.drawImage(ImageIO.read(new File("resources/win_screen2.png")), 0, 0, null);
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             } else if (player.playerNum == 2) {
                 try {
-                    g.drawImage(ImageIO.read(new File("win_screen1.png")), 0, 0, null);
+                    g.drawImage(ImageIO.read(new File("resources/win_screen1.png")), 0, 0, null);
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();

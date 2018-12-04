@@ -22,9 +22,9 @@ public class ExplodePowerUp extends PowerUp {
 
         // Load the sprite
         try {
-            sprite = ImageIO.read(new File("pu_strength.png"));
+            sprite = ImageIO.read(new File("resources/pu_strength.png"));
         } catch (Exception e) {
-            System.out.println("Unable to load health power-up sprite.");
+            System.out.println("Unable to load explode power-up sprite.");
         }
     }
 
